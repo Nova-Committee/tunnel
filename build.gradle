@@ -1,0 +1,47 @@
+plugins {
+    id("java-library")
+    id("java")
+}
+apply plugin: 'maven-publish'
+apply plugin: 'java-library'
+apply plugin: 'java'
+
+group = "cool.muyucloud.tunnel"
+version = "1.0.0"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.google.code.gson:gson:2.10.1")
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+        maven {
+            url = 'https://wiki.nova-committee.cn/snapshots'
+            name 'novaRepositorySnapshots'
+        }
+        maven {
+            url = 'https://wiki.nova-committee.cn/release'
+            name 'novaRepositoryRelease'
+        }
+    }
+
+    publications {
+        release(MavenPublication) {
+            from components.java
+        }
+        snapshot(MavenPublication) {
+            from components.java
+        }
+    }
+}
