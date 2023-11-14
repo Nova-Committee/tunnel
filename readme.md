@@ -124,6 +124,7 @@ public abstract class McHand implements McTunnel {
 2. just like *#1*, create tunnel-implementation `McHandImpl`, but differently on `initTunnel()`
 
 ``` java
+@Tunnel
 public class McHandImpl extends McHand {
     private Hand hand;
 
@@ -182,6 +183,7 @@ public abstract class McTranslatableTextContent implements McTunnel {
 2. Implement abstract method in *TunnelImplementation* of mod-loader-1.x.x
 
 ``` java 
+@Tunnel
 public class McTranslatableTextContentImpl extends McTranslatableTextContent {
 ...
     @Override
@@ -213,6 +215,7 @@ public abstract class McItemStack implements McTunnel {
 3. Implement getter `McItemUsageContextImpl#get()`
 
 ``` java
+@Tunnel
 public class McItemUsageContextImpl extends McItemUsageContext {
 ...
     private ItemUsageContext itemUsageContext;
@@ -228,6 +231,7 @@ public class McItemUsageContextImpl extends McItemUsageContext {
 4. Implement `McItemStackImpl#useOnBlock(McItemUsageContext)`
 
 ``` java
+@Tunnel
 public class McItemStackImpl extends McItemStack {
 ...
     private ItemStack itemStack;
