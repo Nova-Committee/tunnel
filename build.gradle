@@ -27,8 +27,12 @@ publishing {
     repositories {
         mavenLocal()
         maven {
-            url = 'https://wiki.nova-committee.cn/snapshots'
-            name 'novaRepositorySnapshots'
+            url = 'https://wiki.nova-committee.cn/releases'
+            name 'novaRepositoryReleases'
+            credentials {
+                username = System.getenv('NOVA_MAVEN_USERNAME')
+                password = System.getenv('NOVA_MAVEN_PWD')
+            }
         }
         maven {
             url = 'https://wiki.nova-committee.cn/release'
@@ -37,10 +41,7 @@ publishing {
     }
 
     publications {
-        release(MavenPublication) {
-            from components.java
-        }
-        snapshot(MavenPublication) {
+        tunnel(MavenPublication) {
             from components.java
         }
     }

@@ -20,21 +20,29 @@ public class TunnelInitializer {
         List<String> tunnelPaths = getTunnelPaths(loader);
         try {
             for (String tunnelPath : tunnelPaths) {
-                Class<?> cl = loader.loadClass(tunnelPath);
-                if (isTunnelClass(cl)) {
-                    Class<? extends McTunnel> tunnelCl = cl.asSubclass(McTunnel.class);
-                    invokeInitTunnel(tunnelCl);
-                }
+                init(tunnelPath);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static void invokeInitTunnel(Class<? extends McTunnel> cl) {
+    public static void init(String className) {
         try {
-            Constructor<? extends McTunnel> constructor = cl.getConstructor();
-            McTunnel tunnel = constructor.newInstance();
+            Class<?> cl = Class.forName(className);
+            if (isTunnelClass(cl)) {
+                Class<? extends TunnelInitializable> mcTunnelCl = cl.asSubclass(TunnelInitializable.class);
+                invokeInitTunnel(mcTunnelCl);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void invokeInitTunnel(Class<? extends TunnelInitializable> cl) {
+        try {
+            Constructor<? extends TunnelInitializable> constructor = cl.getConstructor();
+            TunnelInitializable tunnel = constructor.newInstance();
             tunnel.initTunnel();
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +51,7 @@ public class TunnelInitializer {
     }
 
     private static Boolean isTunnelClass(Class<?> cl) {
-        return McTunnel.class.isAssignableFrom(cl) && cl.isAnnotationPresent(Tunnel.class);
+        return TunnelInitializable.class.isAssignableFrom(cl) && cl.isAnnotationPresent(Tunnel.class);
     }
 
     private static List<String> getTunnelPaths(ClassLoader mod) {

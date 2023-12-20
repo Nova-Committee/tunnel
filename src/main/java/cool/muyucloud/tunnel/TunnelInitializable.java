@@ -1,6 +1,8 @@
 package cool.muyucloud.tunnel;
 
-public interface McTunnel {
+import java.util.List;
+
+public interface TunnelInitializable {
     Object get();
 
     void initTunnel();
