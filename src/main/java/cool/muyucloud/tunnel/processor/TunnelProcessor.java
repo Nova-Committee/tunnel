@@ -37,13 +37,13 @@ public class TunnelProcessor extends AbstractProcessor {
     }
 
     private String getImpl(TypeElement element) {
-        String iPackage = getPackageName(element);
-        String i = element.getSimpleName().toString();
         Tunnel annotation = element.getAnnotation(Tunnel.class);
         String impl = annotation.impl();
         if (impl.isEmpty()) {
+            String i = element.getSimpleName().toString();
             impl = i + "Impl";
         } else if (impl.indexOf('.') == -1) {
+            String iPackage = getPackageName(element);
             impl = iPackage + "." + impl;
         }
         return impl;
@@ -59,13 +59,13 @@ public class TunnelProcessor extends AbstractProcessor {
         String impl = getImpl(element);
         try {
             String iTunnelFull = iPackage + "." + i;
-            JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(iTunnelFull + "_TunnelInitializer");
+            JavaFileObject sourceFile = processingEnv.getFiler().createSourceFile(iTunnelFull + "$TunnelInitializer");
             PrintWriter writer = new PrintWriter(sourceFile.openWriter());
             writer.println("package " + iPackage + ";");
             writer.println("import cool.muyucloud.tunnel.TunnelInitializer;");
-            writer.println("public class " + i + "_TunnelInitializer {");
+            writer.println("public class " + i + "$TunnelInitializer {");
             writer.println("    static {");
-            writer.println("        TunnelInitializer.init(" + impl + ");");
+            writer.println("        TunnelInitializer.init(\"" + impl + "\");");
             writer.println("    }");
             writer.println("}");
             writer.close();
